@@ -1,0 +1,40 @@
+name: Manual Benchmark
+
+on:
+  workflow_dispatch:
+
+permissions:
+  checks: write
+  pull-requests: write
+
+jobs:
+    start-runner:
+        timeout-minutes: 5              # normally it only takes 1-2 minutes
+        name: Start self-hosted EC2 runner
+        runs-on: ubuntu-latest
+        permissions:
+          actions: write
+        steps:
+          - name: Start EC2 runner
+            id: start-ec2-runner
+            uses: NextChapterSoftware/ec2-action-builder@v1.10
+            with:
+              github_token: ${{ secrets.GH_PERSONAL_ACCESS_TOKEN }}
+              aws_access_key_id: ${{ secrets.DEPLOY_AWS_ACCESS_KEY_ID }}
+              aws_secret_access_key: ${{ secrets.DEPLOY_AWS_SECRET_ACCESS_KEY }}
+              aws_region: "us-west-2"
+              ec2_instance_type: c5.xlarge
+              ec2_ami_id: ami-0a23f6cff7b1c8ca1 # Latest Ubuntu 24.04
+              ec2_subnet_id: "subnet-0d4eaba7f6c80d22d"
+              ec2_security_group_id: "sg-06119d704c9f5d2b4"
+              ec2_instance_ttl: 40                # Optional (default is 60 minutes)
+              ec2_spot_instance_strategy: None    # Other options are: SpotOnly, BestEffort, MaxPerformance
+
+    # Job that runs on the self-hosted runner
+    run-build:
+        timeout-minutes: 1
+        needs:
+          - start-runner
+        runs-on: ${{ github.run_id }}
+        steps:
+          - run: env
