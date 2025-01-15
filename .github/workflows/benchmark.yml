@@ -63,5 +63,5 @@ jobs:
               --thresholds-reset \
               --err \
               --adapter json \
-              --github-actions '${{ secrets.GH_PERSONAL_ACCESS_TOKEN }}' \
+              --github-actions '${{ secrets.GITHUB_TOKEN }}' \
               bencher mock
