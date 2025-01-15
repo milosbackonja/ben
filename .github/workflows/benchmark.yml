@@ -23,10 +23,10 @@ jobs:
               aws_access_key_id: ${{ secrets.DEPLOY_AWS_ACCESS_KEY_ID }}
               aws_secret_access_key: ${{ secrets.DEPLOY_AWS_SECRET_ACCESS_KEY }}
               aws_region: "us-west-2"
-              ec2_instance_type: c5.xlarge
-              ec2_ami_id: ami-00c257e12d6828491 # Latest Ubuntu 24.04
-              ec2_subnet_id: "subnet-0d4eaba7f6c80d22d"
-              ec2_security_group_id: "sg-06119d704c9f5d2b4"
+              ec2_instance_type: "c5.xlarge"
+              ec2_ami_id: "ami-07eef52105e8a2059" # Latest Ubuntu 24.04
+              ec2_subnet_id: "subnet-0ca018c7e1aec610a"
+              ec2_security_group_id: "sg-034207258d7de619d"
               ec2_instance_ttl: 40                # Optional (default is 60 minutes)
               ec2_spot_instance_strategy: None    # Other options are: SpotOnly, BestEffort, MaxPerformance
 
