@@ -31,10 +31,37 @@ jobs:
               ec2_spot_instance_strategy: None    # Other options are: SpotOnly, BestEffort, MaxPerformance
 
     # Job that runs on the self-hosted runner
-    run-build:
-        timeout-minutes: 1
+#    run-build:
+#        timeout-minutes: 1
+#        needs:
+#          - start-runner
+#        runs-on: ${{ github.run_id }}
+#        steps:
+#          - run: env
+
+    benchmark_base_branch:
+        name: Continuous Benchmarking with Bencher
+        permissions:
+          checks: write
         needs:
           - start-runner
         runs-on: ${{ github.run_id }}
         steps:
-          - run: env
+          - uses: actions/checkout@v4
+          - uses: bencherdev/bencher@main
+          - name: Track base branch benchmarks with Bencher
+            run: |
+              bencher run \
+              --project ben \
+              --token '${{ secrets.BENCHER_API_TOKEN }}' \
+              --branch main \
+              --testbed ubuntu-latest \
+              --threshold-measure latency \
+              --threshold-test t_test \
+              --threshold-max-sample-size 64 \
+              --threshold-upper-boundary 0.99 \
+              --thresholds-reset \
+              --err \
+              --adapter json \
+              --github-actions '${{ secrets.GH_PERSONAL_ACCESS_TOKEN }}' \
+              bencher mock
