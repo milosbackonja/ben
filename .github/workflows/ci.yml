@@ -28,6 +28,7 @@ jobs:
             with:
               toolchain: nightly
               components: rustfmt, clippy
+              rustflags: ''
 #          - name: Cargo Test all
 #            run: cargo test --all-features
 #          - name: Rustfmt Check
