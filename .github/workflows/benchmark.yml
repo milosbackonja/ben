@@ -61,6 +61,7 @@ jobs:
               --branch main \
               --testbed test \
               --threshold-measure latency \
+              --threshold-test t_test \
               --err \
               --adapter json \
               --github-actions '${{ secrets.GITHUB_TOKEN }}' \
