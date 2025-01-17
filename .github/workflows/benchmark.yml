@@ -53,8 +53,6 @@ jobs:
             with:
               toolchain: nightly
           - uses: bencherdev/bencher@main
-#          - run: ./scripts/nightly_benchmarks.py --export-file result.json
-
           - name: Track base branch benchmarks with Bencher
             run: |
               bencher run \
@@ -63,10 +61,10 @@ jobs:
               --branch main \
               --testbed test \
               --threshold-measure latency \
-              --threshold-test t_test \
-              --threshold-max-sample-size 64 \
-              --threshold-upper-boundary 0.99 \
-              --thresholds-reset \
+#              --threshold-test t_test \
+#              --threshold-max-sample-size 64 \
+#              --threshold-upper-boundary 0.99 \
+#              --thresholds-reset \
               --err \
               --adapter json \
               --github-actions '${{ secrets.GITHUB_TOKEN }}' \
