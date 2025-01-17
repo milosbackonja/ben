@@ -1,0 +1,30 @@
+name: Manual Benchmark
+
+on:
+  workflow_dispatch:
+
+permissions:
+  checks: write
+  pull-requests: write
+
+jobs:
+    rest_test:
+        name: Rust Test
+        permissions:
+          checks: write
+        runs-on: ubuntu-latest
+        steps:
+          - name: Checkout Public GitLab Repository
+            uses: actions/checkout@v4
+            with:
+              repository: IrreducibleOSS/binius
+              github-server-url: https://gitlab.com
+          - name: Setup Rust
+            uses: actions-rust-lang/setup-rust-toolchain@v1
+            with:
+              toolchain: 1.83.0
+              components: rustfmt
+          - name: Cargo Test all
+            run: cargo test --all-features
+          - name: Rustfmt Check
+            uses: actions-rust-lang/rustfmt@v1
