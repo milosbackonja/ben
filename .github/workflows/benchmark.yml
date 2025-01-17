@@ -53,6 +53,8 @@ jobs:
             with:
               toolchain: nightly
           - uses: bencherdev/bencher@main
+          - run: ./scripts/nightly_benchmarks.py --export-file result.json
+
           - name: Track base branch benchmarks with Bencher
             run: |
               bencher run \
@@ -68,4 +70,4 @@ jobs:
               --err \
               --adapter json \
               --github-actions '${{ secrets.GITHUB_TOKEN }}' \
-              './scripts/nightly_benchmarks.py'
+              --file result.json
