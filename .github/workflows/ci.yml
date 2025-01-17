@@ -19,6 +19,7 @@ jobs:
             with:
               repository: IrreducibleOSS/binius
               github-server-url: https://gitlab.com
+              ref: main
           - name: Setup Rust
             uses: actions-rust-lang/setup-rust-toolchain@v1
             with:
