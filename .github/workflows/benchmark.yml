@@ -8,36 +8,36 @@ permissions:
   pull-requests: write
 
 jobs:
-    start-runner:
-        timeout-minutes: 5              # normally it only takes 1-2 minutes
-        name: Start self-hosted EC2 runner
-        runs-on: ubuntu-latest
-        permissions:
-          actions: write
-        steps:
-          - name: Start EC2 runner
-            id: start-ec2-runner
-            uses: NextChapterSoftware/ec2-action-builder@v1.10
-            with:
-              github_token: ${{ secrets.GH_PERSONAL_ACCESS_TOKEN }}
-              aws_access_key_id: ${{ secrets.DEPLOY_AWS_ACCESS_KEY_ID }}
-              aws_secret_access_key: ${{ secrets.DEPLOY_AWS_SECRET_ACCESS_KEY }}
-              aws_region: "eu-central-1"
-              ec2_instance_type: c5.xlarge
-              ec2_ami_id: ami-02c69142b0b3b4acc # Latest Ubuntu 24.04
-              ec2_subnet_id: "subnet-0ca018c7e1aec610a"
-              ec2_security_group_id: "sg-034207258d7de619d"
-              ec2_instance_ttl: 40                # Optional (default is 60 minutes)
-              ec2_spot_instance_strategy: None    # Other options are: SpotOnly, BestEffort, MaxPerformance
+#    start-runner:
+#        timeout-minutes: 5              # normally it only takes 1-2 minutes
+#        name: Start self-hosted EC2 runner
+#        runs-on: ubuntu-latest
+#        permissions:
+#          actions: write
+#        steps:
+#          - name: Start EC2 runner
+#            id: start-ec2-runner
+#            uses: NextChapterSoftware/ec2-action-builder@v1.10
+#            with:
+#              github_token: ${{ secrets.GH_PERSONAL_ACCESS_TOKEN }}
+#              aws_access_key_id: ${{ secrets.DEPLOY_AWS_ACCESS_KEY_ID }}
+#              aws_secret_access_key: ${{ secrets.DEPLOY_AWS_SECRET_ACCESS_KEY }}
+#              aws_region: "eu-central-1"
+#              ec2_instance_type: c5.xlarge
+#              ec2_ami_id: ami-02c69142b0b3b4acc # Latest Ubuntu 24.04
+#              ec2_subnet_id: "subnet-0ca018c7e1aec610a"
+#              ec2_security_group_id: "sg-034207258d7de619d"
+#              ec2_instance_ttl: 40                # Optional (default is 60 minutes)
+#              ec2_spot_instance_strategy: None    # Other options are: SpotOnly, BestEffort, MaxPerformance
 
     benchmark_base_branch:
         name: Continuous Benchmarking with Bencher
         permissions:
           checks: write
-        needs:
-          - start-runner
-        runs-on: ${{ github.run_id }}
-#        runs-on: ubuntu-latest
+#        needs:
+#          - start-runner
+#        runs-on: ${{ github.run_id }}
+        runs-on: ubuntu-latest
         steps:
           - name: Checkout Private GitLab Repository
             uses: actions/checkout@v4
@@ -60,6 +60,11 @@ jobs:
               --token '${{ secrets.BENCHER_API_TOKEN }}' \
               --branch main \
               --testbed test \
+              --threshold-measure latency \
+              --threshold-test t_test \
+              --threshold-max-sample-size 64 \
+              --threshold-upper-boundary 0.99 \
+              --thresholds-reset \
               --err \
               --adapter json \
               --github-actions '${{ secrets.GITHUB_TOKEN }}' \
