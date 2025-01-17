@@ -41,7 +41,8 @@ jobs:
           - name: Checkout Private GitLab Repository
             uses: actions/checkout@v4
             with:
-              repository: git@gitlab.com:ulvetanna/binius.git
+              repository: ulvetanna/binius.git
+              github-server-url: 'gitlab.com'
               ref: anexj/benchmark_script
               ssh-key: ${{ secrets.GITLAB_SSH_KEY }}
               ssh-known-hosts: |
