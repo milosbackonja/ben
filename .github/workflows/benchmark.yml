@@ -30,15 +30,6 @@ jobs:
               ec2_instance_ttl: 40                # Optional (default is 60 minutes)
               ec2_spot_instance_strategy: None    # Other options are: SpotOnly, BestEffort, MaxPerformance
 
-    # Job that runs on the self-hosted runner
-#    run-build:
-#        timeout-minutes: 1
-#        needs:
-#          - start-runner
-#        runs-on: ${{ github.run_id }}
-#        steps:
-#          - run: env
-
     benchmark_base_branch:
         name: Continuous Benchmarking with Bencher
         permissions:
@@ -47,7 +38,18 @@ jobs:
           - start-runner
         runs-on: ${{ github.run_id }}
         steps:
-          - uses: actions/checkout@v4
+          - name: Checkout Private GitLab Repository
+            uses: actions/checkout@v4
+            with:
+              repository: git@gitlab.com:ulvetanna/binius.git
+              ref: anexj/benchmark_script
+              ssh-key: ${{ secrets.GITLAB_SSH_KEY }}
+              ssh-known-hosts: |
+                gitlab.com ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCsj2bNKTBSpIYDEGk9KxsGh3mySTRgMtXL583qmBpzeQ+jqCMRgBqB98u3z++J1sKlXHWfM9dyhSevkMwSbhoR8XIq/U0tCNyokEi/ueaBMCvbcTHhO7FcwzY92WK4Yt0aGROY5qX2UKSeOvuP4D6TPqKF1onrSzH9bx9XUf2lEdWT/ia1NEKjunUqu1xOB/StKDHMoX4/OKyIzuS0q/T1zOATthvasJFoPrAjkohTyaDUz2LN5JoH839hViyEG82yB+MjcFV5MU3N1l1QL3cVUCh93xSaua1N85qivl+siMkPGbO5xR/En4iEY6K2XPASUEMaieWVNTRCtJ4S8H+9
+          - name: Setup Rust
+            uses: actions-rust-lang/setup-rust-toolchain@v1
+            with:
+              toolchain: nightly
           - uses: bencherdev/bencher@main
           - name: Track base branch benchmarks with Bencher
             run: |
@@ -55,13 +57,8 @@ jobs:
               --project ben \
               --token '${{ secrets.BENCHER_API_TOKEN }}' \
               --branch main \
-              --testbed ubuntu-latest \
-              --threshold-measure latency \
-              --threshold-test t_test \
-              --threshold-max-sample-size 64 \
-              --threshold-upper-boundary 0.99 \
-              --thresholds-reset \
+              --testbed test \
               --err \
               --adapter json \
               --github-actions '${{ secrets.GITHUB_TOKEN }}' \
-              bencher mock
+              './scripts/nightly_benchmarks.py'
