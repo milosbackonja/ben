@@ -15,6 +15,7 @@ jobs:
         permissions:
           actions: write
         steps:
+          - run: whoami
           - name: Start EC2 runner
             id: start-ec2-runner
             uses: NextChapterSoftware/ec2-action-builder@v1.10
@@ -41,6 +42,7 @@ jobs:
         runs-on: ${{ github.run_id }}
 #        runs-on: ubuntu-latest
         steps:
+          - run: whoami
           - name: Checkout Private GitLab Repository
             uses: actions/checkout@v4
             with:
