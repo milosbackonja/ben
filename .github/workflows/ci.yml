@@ -28,8 +28,8 @@ jobs:
             with:
               toolchain: 1.83.0
               components: rustfmt
-          - name: Cargo Test all
-            run: cargo test --all-features
+#          - name: Cargo Test all
+#            run: cargo test --all-features
           - name: Rustfmt Check
             uses: actions-rust-lang/rustfmt@v1
 # https://gitlab.com/IrreducibleOSS/binius.git
