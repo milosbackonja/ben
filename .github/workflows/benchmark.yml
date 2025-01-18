@@ -61,6 +61,10 @@ jobs:
 #              rustup install nightly
 #              rustup default nightly
           - uses: bencherdev/bencher@main
+          - name: Check Cargo and Rustup versions
+            run: |
+              cargo --version
+              rustup --version
           - name: Track base branch benchmarks with Bencher
             run: |
               bencher run \
