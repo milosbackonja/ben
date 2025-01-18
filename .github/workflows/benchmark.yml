@@ -18,7 +18,7 @@ jobs:
           - run: whoami
           - name: Start EC2 runner
             id: start-ec2-runner
-            uses: free-devops/ec2-action-builder@v1.22-dev-03
+            uses: free-devops/ec2-action-builder@v1.22-dev-04
             with:
               github_token: ${{ secrets.GH_PERSONAL_ACCESS_TOKEN }}
               aws_access_key_id: ${{ secrets.DEPLOY_AWS_ACCESS_KEY_ID }}
