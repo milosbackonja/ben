@@ -36,6 +36,8 @@ export class UserData {
     // shutdown_script.sh => used for graceful termination with a delay allowing for log uploads
     const cmds = [
       "#!/bin/bash -xv",
+      `apt update`,
+      `apt install -y build-essential gcc`,
       // Create the runner user if it doesn't exist
       `if ! id -u runner >/dev/null 2>&1; then sudo useradd -m runner; fi`,
       `shutdown -P +${this.config.ec2InstanceTtl}`,
