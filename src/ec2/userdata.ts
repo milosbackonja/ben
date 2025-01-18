@@ -57,9 +57,9 @@ export class UserData {
       "[ -n \"$(command -v yum)\" ] && yum install libicu -y",
       `chown -R runner.runner $CURRENT_PATH`,
       `su runner`,
-      `./config.sh --unattended  --ephemeral --url https://github.com/${github.context.repo.owner}/${github.context.repo.repo} --token ${runnerRegistrationToken.token} --labels ${this.config.githubActionRunnerLabel} --name $RUNNER_NAME ${this.config.githubActionRunnerExtraCliArgs}`,
+      `su -c "./config.sh --unattended --ephemeral --url https://github.com/${github.context.repo.owner}/${github.context.repo.repo} --token ${runnerRegistrationToken.token} --labels ${this.config.githubActionRunnerLabel} --name $RUNNER_NAME ${this.config.githubActionRunnerExtraCliArgs}" runner`,
       jobStartIdleTimeoutTask,
-      "./run.sh",
+      `su -c "./run.sh" runner`,
     ];
 
     return Buffer.from(cmds.join("\n")).toString("base64");
