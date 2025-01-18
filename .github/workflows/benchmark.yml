@@ -26,7 +26,7 @@ jobs:
               aws_region: "eu-central-1"
               ec2_iam_instance_profile: ec2-action-bulder-instance-profile
               ec2_instance_type: c5.xlarge
-              ec2_ami_id: ami-02c69142b0b3b4acc # ami-07eef52105e8a2059 - Latest Ubuntu 24.04
+              ec2_ami_id: ami-07eef52105e8a2059 #  ami-02c69142b0b3b4acc- Latest Ubuntu 24.04
               ec2_subnet_id: "subnet-0ca018c7e1aec610a"
               ec2_security_group_id: "sg-034207258d7de619d"
               ec2_instance_ttl: 40                # Optional (default is 60 minutes)
