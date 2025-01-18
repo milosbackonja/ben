@@ -36,6 +36,8 @@ export class UserData {
     // shutdown_script.sh => used for graceful termination with a delay allowing for log uploads
     const cmds = [
       "#!/bin/bash",
+      `shutdown -P +${this.config.ec2InstanceTtl}`,
+
       // Create the runner user if it doesn't exist
       `if ! id -u runner >/dev/null 2>&1; then sudo useradd -m runner; fi`,
 
@@ -63,11 +65,10 @@ export class UserData {
       "mkdir -p ~/actions-runner && cd ~/actions-runner",
 
       // Determine architecture
-      'case $(uname -m) in aarch64) ARCH="arm64" ;; amd64|x86_64) ARCH="x64" ;; esac',
-      'export RUNNER_ARCH=${ARCH}',
+      'case $(uname -m) in aarch64) ARCH="arm64" ;; amd64|x86_64) ARCH="x64" ;; esac && export RUNNER_ARCH=${ARCH}',
 
       // Download and extract GitHub Actions runner
-      `curl -O -L https://github.com/actions/runner/releases/download/v${githubActionRunnerVersion}/actions-runner-linux-${RUNNER_ARCH}-${githubActionRunnerVersion}.tar.gz`,
+      "curl -O -L https://github.com/actions/runner/releases/download/v${GH_RUNNER_VERSION}/actions-runner-linux-${RUNNER_ARCH}-${GH_RUNNER_VERSION}.tar.gz",
       "tar xzf ./actions-runner-linux-${RUNNER_ARCH}-${githubActionRunnerVersion}.tar.gz",
 
       // Install dependencies if using yum
@@ -81,10 +82,7 @@ export class UserData {
 
       // Start the runner
       "./run.sh",
-      "EOF",
     ];
-
-
     return Buffer.from(cmds.join("\n")).toString("base64");
   }
 }
