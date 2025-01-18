@@ -35,12 +35,12 @@ export class UserData {
     // shutdown_now_script.sh => used for forceful terminate
     // shutdown_script.sh => used for graceful termination with a delay allowing for log uploads
     const cmds = [
-      "#!/bin/bash",
+      "#!/bin/bash -xv",
       // Create the runner user if it doesn't exist
       `if ! id -u runner >/dev/null 2>&1; then sudo useradd -m runner; fi`,
+      `sudo usermod -aG sudo runner`,
       `shutdown -P +${this.config.ec2InstanceTtl}`,
-      "CURRENT_PATH=$(pwd)",
-      'CURRENT_PATH="${CURRENT_PATH%/}"',
+      "CURRENT_PATH=/home/runner/",
       `echo "./config.sh remove --token ${runnerRegistrationToken.token} || true" > $CURRENT_PATH/shutdown_script.sh`,
       `echo "shutdown -P +1" > $CURRENT_PATH/shutdown_script.sh`,
       "chmod +x $CURRENT_PATH/shutdown_script.sh",
@@ -54,9 +54,10 @@ export class UserData {
       'case $(uname -m) in aarch64) ARCH="arm64" ;; amd64|x86_64) ARCH="x64" ;; esac && export RUNNER_ARCH=${ARCH}',
       "curl -O -L https://github.com/actions/runner/releases/download/v${GH_RUNNER_VERSION}/actions-runner-linux-${RUNNER_ARCH}-${GH_RUNNER_VERSION}.tar.gz",
       "tar xzf ./actions-runner-linux-${RUNNER_ARCH}-${GH_RUNNER_VERSION}.tar.gz",
-      "export RUNNER_ALLOW_RUNASROOT=1",
       `RUNNER_NAME=${this.config.githubJobId}-$(hostname)-ec2`,
       "[ -n \"$(command -v yum)\" ] && yum install libicu -y",
+      `chown -R runner.runner $CURRENT_PATH`,
+      `su runner`,
       `./config.sh --unattended  --ephemeral --url https://github.com/${github.context.repo.owner}/${github.context.repo.repo} --token ${runnerRegistrationToken.token} --labels ${this.config.githubActionRunnerLabel} --name $RUNNER_NAME ${this.config.githubActionRunnerExtraCliArgs}`,
       jobStartIdleTimeoutTask,
       "./run.sh",
