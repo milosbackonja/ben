@@ -1,4 +1,4 @@
-name: 'Deploy self-hosted runners to EC2 (Spot/On-Demand)'
+name: 'Deploy self-hosted runners to EC2'
 description: 'Automatically deploy self-hosted runners to AWS EC2 using Spot/On-Demand instances and optimize for best performance/cost.'
 branding:
   icon: 'server'
