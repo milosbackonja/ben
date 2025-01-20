@@ -15,7 +15,6 @@ jobs:
         permissions:
           actions: write
         steps:
-          - run: whoami
           - name: Start EC2 runner
             id: start-ec2-runner
             uses: free-devops/ec2-action-builder@v1.22-dev-13
@@ -40,11 +39,7 @@ jobs:
         needs:
           - start-runner
         runs-on: ${{ github.run_id }}
-        env:
-          CARGO_INCREMENTAL: "1"
-#        runs-on: ubuntu-latest
         steps:
-          - run: whoami
           - name: Checkout Private GitLab Repository
             uses: actions/checkout@v4
             with:
@@ -58,12 +53,6 @@ jobs:
             uses: actions-rust-lang/setup-rust-toolchain@v1
             with:
               toolchain: ''
-              cache-directories: |
-                Swatinem/rust-cache
-#          - name: Setup Rust
-#            run: |
-#              rustup install nightly
-#              rustup default nightly
           - uses: bencherdev/bencher@main
           - name: Check Cargo and Rustup versions
             run: |
