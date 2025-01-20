@@ -56,7 +56,8 @@ jobs:
             uses: actions-rust-lang/setup-rust-toolchain@v1
             with:
               toolchain: ''
-
+              cache-directories: |
+                target/release
 #          - name: Setup Rust
 #            run: |
 #              rustup install nightly
@@ -66,6 +67,8 @@ jobs:
             run: |
               cargo --version
               rustup --version
+          - name: Track base branch benchmarks with Bencher
+            run: /scripts/nightly_benchmarks.py
           - name: Track base branch benchmarks with Bencher
             run: |
               bencher run \
