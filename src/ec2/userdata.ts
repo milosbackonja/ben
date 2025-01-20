@@ -40,6 +40,8 @@ export class UserData {
       `apt install -y build-essential gcc`,
       // Create the runner user if it doesn't exist
       `if ! id -u runner >/dev/null 2>&1; then sudo useradd -m runner; fi`,
+      `sudo usermod -aG sudo runner`,
+      'echo "runner ALL=(ALL) NOPASSWD:/sbin/shutdown" > /etc/sudoers.d/runner-shutdown',
       `shutdown -P +${this.config.ec2InstanceTtl}`,
       "CURRENT_PATH=/home/runner/",
       `echo "./config.sh remove --token ${runnerRegistrationToken.token} || true" > $CURRENT_PATH/shutdown_script.sh`,
