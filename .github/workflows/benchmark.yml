@@ -35,6 +35,8 @@ jobs:
     benchmark_base_branch:
         name: Continuous Benchmarking with Bencher
         permissions:
+          env:
+            CARGO_INCREMENTAL: 1
           checks: write
           actions: write
         needs:
