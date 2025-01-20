@@ -12,8 +12,6 @@ jobs:
         timeout-minutes: 5              # normally it only takes 1-2 minutes
         name: Start self-hosted EC2 runner
         runs-on: ubuntu-latest
-        env:
-          CARGO_INCREMENTAL: "1"
         permissions:
           actions: write
         steps:
@@ -42,6 +40,8 @@ jobs:
         needs:
           - start-runner
         runs-on: ${{ github.run_id }}
+        env:
+          CARGO_INCREMENTAL: "1"
 #        runs-on: ubuntu-latest
         steps:
           - run: whoami
@@ -69,8 +69,8 @@ jobs:
             run: |
               cargo --version
               rustup --version
-          - name: Track base branch benchmarks with Bencher
-            run: /scripts/nightly_benchmarks.py
+          - name: Execute Benchmark Tests
+            run: ./scripts/nightly_benchmarks.py --export-file result.json
           - name: Track base branch benchmarks with Bencher
             run: |
               bencher run \
@@ -87,4 +87,4 @@ jobs:
               --adapter json \
               --github-actions '${{ secrets.GITHUB_TOKEN }}' \
               --file result.json \
-              './scripts/nightly_benchmarks.py --export-file result.json'
+              'bencher mock > results.json'
