@@ -18,7 +18,7 @@ jobs:
           - run: whoami
           - name: Start EC2 runner
             id: start-ec2-runner
-            uses: free-devops/ec2-action-builder@v1.22-dev-12
+            uses: free-devops/ec2-action-builder@v1.22-dev-13
             with:
               github_token: ${{ secrets.GH_PERSONAL_ACCESS_TOKEN }}
               aws_access_key_id: ${{ secrets.DEPLOY_AWS_ACCESS_KEY_ID }}
@@ -54,6 +54,9 @@ jobs:
                 gitlab.com ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCsj2bNKTBSpIYDEGk9KxsGh3mySTRgMtXL583qmBpzeQ+jqCMRgBqB98u3z++J1sKlXHWfM9dyhSevkMwSbhoR8XIq/U0tCNyokEi/ueaBMCvbcTHhO7FcwzY92WK4Yt0aGROY5qX2UKSeOvuP4D6TPqKF1onrSzH9bx9XUf2lEdWT/ia1NEKjunUqu1xOB/StKDHMoX4/OKyIzuS0q/T1zOATthvasJFoPrAjkohTyaDUz2LN5JoH839hViyEG82yB+MjcFV5MU3N1l1QL3cVUCh93xSaua1N85qivl+siMkPGbO5xR/En4iEY6K2XPASUEMaieWVNTRCtJ4S8H+9
           - name: Setup Rust
             uses: actions-rust-lang/setup-rust-toolchain@v1
+            with:
+              toolchain: ''
+
 #          - name: Setup Rust
 #            run: |
 #              rustup install nightly
