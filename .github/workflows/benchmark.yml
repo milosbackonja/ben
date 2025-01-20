@@ -12,6 +12,8 @@ jobs:
         timeout-minutes: 5              # normally it only takes 1-2 minutes
         name: Start self-hosted EC2 runner
         runs-on: ubuntu-latest
+        env:
+          CARGO_INCREMENTAL: "1"
         permissions:
           actions: write
         steps:
@@ -37,8 +39,6 @@ jobs:
         permissions:
           checks: write
           actions: write
-        env:
-          CARGO_INCREMENTAL: 1
         needs:
           - start-runner
         runs-on: ${{ github.run_id }}
@@ -59,7 +59,7 @@ jobs:
             with:
               toolchain: ''
               cache-directories: |
-                target/release
+                Swatinem/rust-cache
 #          - name: Setup Rust
 #            run: |
 #              rustup install nightly
