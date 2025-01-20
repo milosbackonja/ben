@@ -35,10 +35,10 @@ jobs:
     benchmark_base_branch:
         name: Continuous Benchmarking with Bencher
         permissions:
-        env:
-          CARGO_INCREMENTAL: 1
           checks: write
           actions: write
+        env:
+          CARGO_INCREMENTAL: 1
         needs:
           - start-runner
         runs-on: ${{ github.run_id }}
